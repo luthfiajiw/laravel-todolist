@@ -8,10 +8,25 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    public function testLoginView()
+    public function testLoginPage()
     {
         $this->get('/login')
             ->assertSeeText('Login');
+    }
+
+    public function testBlockLoginPageForUserAlreadyLoggedIn()
+    {
+        $this->withSession([
+            "user" => "admin"
+        ])->get('/login')
+            ->assertRedirect('/');
+        
+        $this->withSession([
+            "user" => "admin"
+        ])->post('/login', [
+            "user" => "admin",
+            "password" => "123456"
+        ])->assertRedirect('/');
     }
 
     public function testLoginSucceed()
