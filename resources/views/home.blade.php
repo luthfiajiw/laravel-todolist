@@ -32,7 +32,8 @@
                             Now</a></p>
                 </div>
                 <div class="col-md-10 mx-auto col-lg-5">
-                    <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/todolist">
+                    <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/">
+                        @csrf
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" name="todo" placeholder="todo">
                             <label for="todo">Todo</label>
@@ -43,25 +44,27 @@
             </div>
             <div class="row align-items-right g-lg-5 py-5">
                 <div class="mx-auto">
-                    <form id="deleteForm" method="post" style="display: none">
-
-                    </form>
                     <table class="table table-striped">
                         <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Todo</th>
-                            <th scope="col"></th>
-                        </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Todo</th>
+                                <th scope="col"></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Belajar Laravel Dasar</td>
-                            <td>
-                                <button class="w-100 btn btn-lg btn-danger" type="submit">Remove</button>
-                            </td>
-                        </tr>
+                            @foreach ($todolist as $todo)
+                                <tr>
+                                    <th scope="row">{{$todo["id"]}}</th>
+                                    <td>{{$todo["todo"]}}</td>
+                                    <td>
+                                        <form action="/delete/{{$todo['id']}}" method="POST">
+                                            @csrf
+                                            <button class="w-100 btn btn-lg btn-danger" type="submit">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

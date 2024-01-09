@@ -17,7 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'homePage']);
+Route::controller(HomeController::class)
+    ->middleware(OnlyUserMiddleware::class)->group(function () {
+        Route::get('/', 'homePage');
+        Route::post('/', 'addTodo');
+        Route::post('/delete/{id}', 'deleteTodo');
+    });
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/login', 'login')->middleware([OnlyGuestMiddleware::class]);
